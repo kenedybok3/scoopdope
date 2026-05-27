@@ -125,6 +125,9 @@ import { validationSchema } from './config/validation.schema';
     AccessControlModule,
     RateLimitModule,
     AuditModule,
+    DownloadsModule,
+    QaModule,
+    AnnouncementsModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

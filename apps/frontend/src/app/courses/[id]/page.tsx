@@ -3,17 +3,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ReviewForm } from '@/components/reviews/ReviewForm';
 import { ReviewList } from '@/components/reviews/ReviewList';
+import { QAPanel } from '@/components/courses/QAPanel';
+import { AnnouncementsPanel } from '@/components/courses/AnnouncementsPanel';
+import { useAuth } from '@/hooks/useAuth';
 
 interface CourseDetailPageProps {
   params: { id: string };
 }
 
 export default function CourseDetailPage({ params }: CourseDetailPageProps) {
-  const [tab, setTab] = useState<'overview' | 'reviews'>('overview');
+  const [tab, setTab] = useState<'overview' | 'reviews' | 'qa' | 'announcements'>('overview');
   const [reviewsKey, setReviewsKey] = useState(0);
+  const { user } = useAuth();
 
-  // In a real app these would come from an API call
   const courseId = params.id;
+  const isInstructor = user?.role === 'instructor' || user?.role === 'admin';
 
   return (
     <main className="max-w-4xl mx-auto p-8">
@@ -26,7 +30,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
       </Link>
 
       <div className="flex gap-4 border-b mb-6">
-        {(['overview', 'reviews'] as const).map((t) => (
+        {(['overview', 'reviews', 'qa', 'announcements'] as const).map((t) => (
           <button
             key={t}
             className={`pb-2 px-1 capitalize text-sm font-medium border-b-2 transition-colors ${
@@ -34,7 +38,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
             }`}
             onClick={() => setTab(t)}
           >
-            {t}
+            {t === 'qa' ? 'Q&A' : t}
           </button>
         ))}
       </div>
@@ -49,6 +53,21 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
       {tab === 'reviews' && (
         <ReviewList key={reviewsKey} courseId={courseId} />
       )}
+
+      {tab === 'qa' && (
+        <QAPanel
+          courseId={courseId}
+          isInstructor={isInstructor}
+          currentUserId={user?.id}
+        />
+      )}
+
+      {tab === 'announcements' && (
+        <AnnouncementsPanel courseId={courseId} isInstructor={isInstructor} />
+      )}
+    </main>
+  );
+}
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
