@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, UseGuards, Request } from '@nestjs/common';
 import { SurveysService } from './surveys.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -20,6 +20,7 @@ export class SurveysController {
       description: string;
       triggerType: 'completion' | 'milestone';
       triggerMilestone?: number;
+      allowAnonymous?: boolean;
     },
   ) {
     return this.surveysService.createSurvey(
@@ -28,6 +29,7 @@ export class SurveysController {
       body.description,
       body.triggerType,
       body.triggerMilestone,
+      body.allowAnonymous,
     );
   }
 
@@ -57,10 +59,11 @@ export class SurveysController {
 
   @Post(':surveyId/responses')
   async submitResponse(
+    @Request() req,
     @Param('surveyId') surveyId: string,
-    @Body() body: { userId: string; answers: Record<string, string | number> },
+    @Body() body: { answers: Record<string, string | number>; isAnonymous?: boolean },
   ) {
-    return this.surveysService.submitResponse(surveyId, body.userId, body.answers);
+    return this.surveysService.submitResponse(surveyId, req.user.id, body.answers, body.isAnonymous);
   }
 
   @Get('course/:courseId')
@@ -80,5 +83,12 @@ export class SurveysController {
   @Roles('admin', 'instructor')
   async getAnalytics(@Param('surveyId') surveyId: string) {
     return this.surveysService.getAnalytics(surveyId);
+  }
+
+  @Get('instructor/:instructorId/aggregate')
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'instructor')
+  async getInstructorAggregate(@Param('instructorId') instructorId: string) {
+    return this.surveysService.getInstructorSurveyAggregate(instructorId);
   }
 }
