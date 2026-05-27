@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { toast } from '@/lib/toast';
 
 interface Certificate {
   id: string;
@@ -44,21 +45,21 @@ export function CertificateViewer({ certificate, isOpen, onClose }: CertificateV
   };
 
   const shareLinkedIn = () => {
-    const url = `${window.location.origin}/credentials/${certificate.id}`;
+    const url = `${window.location.origin}/certificates/${certificate.id}`;
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
     window.open(linkedInUrl, '_blank', 'width=600,height=600');
   };
 
   const shareTwitter = () => {
-    const url = `${window.location.origin}/credentials/${certificate.id}`;
+    const url = `${window.location.origin}/certificates/${certificate.id}`;
     const text = `I just earned a certificate for ${certificate.courseName}! 🎓`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=600');
   };
 
   const copyLink = () => {
-    const url = `${window.location.origin}/credentials/${certificate.id}`;
-    navigator.clipboard.writeText(url);
+    const url = `${window.location.origin}/certificates/${certificate.id}`;
+    navigator.clipboard.writeText(url).then(() => toast.success('Link copied!'));
   };
 
   const print = () => {
