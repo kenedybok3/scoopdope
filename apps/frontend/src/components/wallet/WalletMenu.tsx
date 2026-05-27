@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { useWalletStore } from '@/store/walletStore';
 import { connectFreighter, fetchXlmBalance } from '@/lib/walletApi';
+import { TestnetFaucet } from './TestnetFaucet';
 
 interface WalletMenuProps {
   onClose: () => void;
@@ -76,6 +77,7 @@ export function WalletMenu({ onClose }: WalletMenuProps) {
           <p className="text-sm font-medium">{balance ?? '—'} XLM</p>
         )}
       </div>
+      {address && <TestnetFaucet publicKey={address} />}
       <div className="flex gap-2 pt-2 border-t">
         <button
           className="flex-1 text-sm border rounded-lg py-1.5 hover:bg-gray-50 transition-colors"
