@@ -41,30 +41,15 @@ export const emailTemplates = {
       </div>`,
   }),
 
-  waitlistJoined: (data: { userName: string; courseTitle: string; position: number; courseUrl: string; unsubscribeUrl: string }) => ({
-    subject: `You're on the waitlist for "${data.courseTitle}"`,
+  moduleUnlocked: (data: { userName: string; courseTitle: string; moduleTitle: string; courseUrl: string; unsubscribeUrl: string }) => ({
+    subject: `New content unlocked in "${data.courseTitle}"`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-        <h2>You're on the waitlist!</h2>
+        <h2>🔓 New Module Available</h2>
         <p>Hi ${data.userName},</p>
-        <p>You've been added to the waitlist for <strong>${data.courseTitle}</strong>.</p>
-        <p>Your current position: <strong>#${data.position}</strong></p>
-        <p>We'll automatically enroll you and send you an email as soon as a spot opens up. No action needed.</p>
-        <a href="${data.courseUrl}" style="background:#6366f1;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">View Course</a>
-        <p style="margin-top:40px;font-size:12px;color:#999">
-          <a href="${data.unsubscribeUrl}">Unsubscribe</a>
-        </p>
-      </div>`,
-  }),
-
-  waitlistEnrolled: (data: { userName: string; courseTitle: string; courseUrl: string; unsubscribeUrl: string }) => ({
-    subject: `Great news — you've been enrolled in "${data.courseTitle}"!`,
-    html: `
-      <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-        <h2>🎉 A spot opened up for you!</h2>
-        <p>Hi ${data.userName},</p>
-        <p>A spot became available in <strong>${data.courseTitle}</strong> and you've been automatically enrolled from the waitlist.</p>
-        <a href="${data.courseUrl}" style="background:#059669;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Start Learning</a>
+        <p>A new module has just unlocked in <strong>${data.courseTitle}</strong>:</p>
+        <p style="font-size:18px;font-weight:bold">${data.moduleTitle}</p>
+        <a href="${data.courseUrl}" style="background:#4F46E5;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block">Start Learning</a>
         <p style="margin-top:40px;font-size:12px;color:#999">
           <a href="${data.unsubscribeUrl}">Unsubscribe</a>
         </p>

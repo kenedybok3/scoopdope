@@ -77,6 +77,19 @@ export class ModulesController {
     return this.modulesService.remove(id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Post('modules/:id/unlock')
+  @ApiOperation({ summary: 'Admin override: unlock a module immediately by clearing its release date' })
+  @ApiResponse({ status: 200, description: 'Module unlocked', schema: { example: { id: 'uuid', title: 'Module 1', isLocked: false } } })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Module not found' })
+  unlockModule(@Param('id') id: string) {
+    return this.modulesService.unlockNow(id);
+  }
+
   // ── Lessons ───────────────────────────────────────────────────────────────
 
   @Get('modules/:moduleId/lessons')
