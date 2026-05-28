@@ -40,6 +40,9 @@ export class Certificate {
   @Column({ default: 'pending' })
   status: 'pending' | 'minted' | 'verified';
 
+  @Column({ nullable: true })
+  pdfUrl: string;
+
   @CreateDateColumn()
   issuedAt: Date;
 }
