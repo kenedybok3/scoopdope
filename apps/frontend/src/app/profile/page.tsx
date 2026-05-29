@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { StreakWidget } from '@/components/ui/StreakWidget';
 import { CreditCard, Star, ExternalLink } from 'lucide-react';
+import { toast } from '@/lib/toast';
 import WalletSection from './WalletSection';
 
 interface User {
