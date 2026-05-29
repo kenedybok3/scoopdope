@@ -46,8 +46,8 @@ resource "aws_ecs_task_definition" "backend" {
     }
 
     healthCheck = {
-      command     = ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
-      interval    = 30
+      command     = ["CMD-SHELL", "curl -sf http://localhost:3000/health/live || exit 1"]
+      interval    = 15
       timeout     = 5
       retries     = 3
       startPeriod = 10
@@ -115,11 +115,12 @@ resource "aws_lb_target_group" "backend" {
   target_type = "ip"
 
   health_check {
-    path                = "/health"
+    path                = "/health/ready"
     healthy_threshold   = 2
     unhealthy_threshold = 3
     timeout             = 5
-    interval            = 30
+    interval            = 15
+    matcher             = "200"
   }
 
   tags = {
